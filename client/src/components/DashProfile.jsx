@@ -3,6 +3,12 @@ import {useSelector} from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
+// import {
+//     updateStart,
+//     updateSuccess,
+//     updateFailure,
+// } from '../redux/user/userSlice.js';
+// import { useDispatch } from 'react-redux';
 import 'react-circular-progressbar/dist/styles.css';
 import {getDownloadURL, getStorage,ref, uploadBytesResumable} from 'firebase/storage';
  
@@ -12,6 +18,7 @@ export default function DashProfile() {
     const [imageFileUrl,setImageFileUrl] = useState(null);
     const [imageFileUploadProgress,setImageFileUploadFileProgress] = useState(null);
     const [imageFileUploadError,setImageFileUploadFileError] = useState(null);
+
     const filePickerRef = useRef();
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -26,6 +33,7 @@ export default function DashProfile() {
         }
     },[imageFile]);
     const uploadImage = async () =>{
+        
         setImageFileUploadFileError(null);
         const storage = getStorage(app);
         const fileName = new Date().getTime() + imageFile.name;
@@ -43,14 +51,17 @@ export default function DashProfile() {
                 setImageFileUploadFileProgress(null);
                 setImageFile(null);
                 setImageFileUrl(null);
+                
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL)=>{
                     setImageFileUrl(downloadURL);
+                    
                 });
             }
         );
     };
+    
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
         <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
@@ -89,14 +100,16 @@ export default function DashProfile() {
                 id='username' 
                 placeholder='username'
                 defaultValue={currentuser.username} 
+                
             />
             <TextInput
                 type='email'
                 id='email'
                 placeholder='email'
                 defaultValue={currentuser.email}
+                
             />
-            <TextInput type='password' id='password' placeholder='password'/>
+            <TextInput type='password' id='password' placeholder='password' />
             <Button type='submit' gradientDuoTone='purpleToBlue' outline>
                 Update
             </Button>
