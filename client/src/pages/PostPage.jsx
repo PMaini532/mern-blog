@@ -2,13 +2,13 @@ import {Button,Spinner} from 'flowbite-react';
 import {useEffect,useState} from 'react';
 import {Link,useParams} from 'react-router-dom';
 import CallToAction from '../components/CallToAction';
+import CommentSection from '../components/CommentSection';
 
 export default function PostPage() {
     const {postSlug} = useParams();
     const [loading,setLoading] = useState(true);
     const [error,setError] = useState(false);
     const [post,setPost] = useState(null);
-
     useEffect(()=>{
         const fetchPost = async()=>{
             try{
@@ -32,6 +32,7 @@ export default function PostPage() {
         };
         fetchPost();
     },[postSlug]);
+    console.log(post);
     if(loading)    
         return(
             <div className='flex justify-center items-center min-h-screen'>
@@ -54,6 +55,7 @@ export default function PostPage() {
         </div>
         <div className="max-w-4xl mx-auto w-full">
         <CallToAction /></div>
+        <CommentSection postId={post._id}/>
     </main>
   )
 }
