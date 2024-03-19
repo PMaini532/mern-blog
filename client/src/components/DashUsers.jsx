@@ -46,7 +46,21 @@ export default function DashPosts() {
     }
   }
 
-  const handleDeletePost = async () =>{
+ const handleDeleteUser = async () => {
+    try {
+        const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+            method: 'DELETE',
+        });
+        const data = await res.json();
+        if (res.ok) {
+            setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
+            setShowModal(false);
+        } else {
+            console.log(data.message);
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
   };
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100
@@ -73,7 +87,7 @@ export default function DashPosts() {
                         <img 
                           src={user.profilePicture}
                           alt={user.username}
-                          className='w-1 0 h-10 object-cover bg-gray-500 rounded-full'
+                          className='w-10 h-10 object-cover bg-gray-500 rounded-full'
                         />
               
                     </Table.Cell>
@@ -92,7 +106,7 @@ export default function DashPosts() {
                       <span 
                         onClick={()=>{
                           setShowModal(true);
-                          setUserIdToDelete(post._id);
+                          setUserIdToDelete(user._id);
                         }}
                         className='font-mediym text-red-500 hover:underline cursor-pointer'>Delete</span>
                     </Table.Cell>
@@ -123,7 +137,7 @@ export default function DashPosts() {
               Are you sure you want to delete this user?
             </h3>
             <div className='flex justify-center gap-4'>
-              <Button color='failure' onClick={handleDeletePost}>
+              <Button color='failure' onClick={handleDeleteUser}>
                 Yes, I'm sure
               </Button>
               <Button color='gray' onClick={() => setShowModal(false)}>
